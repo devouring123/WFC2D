@@ -2,6 +2,8 @@
 
 Wave Function Collapse 알고리즘을 이용하여 절차적으로 생성되는 랜덤 지형 생성 액터 개발
 
+![UE5WFC2D.webp](https://github.com/devouring123/WFC2D/blob/main/UE5WFC2D.webp)
+
 - **개발 환경**: Unreal Engine 5
 - **플랫폼**: PC
 - **핵심 기술**: Wave Function Collapse(WFC), Instanced Static Mesh, Data Asset
