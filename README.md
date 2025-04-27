@@ -2,6 +2,13 @@
 
 Wave Function Collapse 알고리즘을 이용하여 절차적으로 생성되는 랜덤 지형 생성 액터 개발
 
+## Trench Tile
+![UWFC2DTrench.webp](https://github.com/devouring123/WFC2D/blob/main/UWFC2DTrench.webp)
+
+## Urban Tile
+![UWFC2DUrban.webp](https://github.com/devouring123/WFC2D/blob/main/UWFC2DUrban.webp)
+
+## Basic Tile
 ![UE5WFC2D.webp](https://github.com/devouring123/WFC2D/blob/main/UE5WFC2D.webp)
 
 - **개발 환경**: Unreal Engine 5
