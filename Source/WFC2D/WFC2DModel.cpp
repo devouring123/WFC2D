@@ -6,7 +6,7 @@
 FWFC2DTile UWFC2DModel::RotateTileClockwise(FWFC2DTile& Tile, int32 RotationMultiplierBy90Degree)
 {
 	TArray<FString> RotatedEdge;
-	for(int32 i = 0; i < 4; i++)
+	for(int32 i = 0; i < 4; ++i)
 	{
 		RotatedEdge.Add(Tile.Edges[(i - RotationMultiplierBy90Degree + 4) % 4]);
 	}
@@ -21,7 +21,10 @@ TArray<FWFC2DTile> UWFC2DModel::CreateTileSet()
 	for (const auto &Tile : TileInformation)
 	{
 		TileSet.Add(Tile);
-		for(int32 i = 1; i < 4; i++)
+	}
+	for (const auto &Tile : TileInformation)
+	{
+		for(int32 i = 1; i < 4; ++i)
 		{
 			FWFC2DTile CopyTile(Tile);
 			TileSet.AddUnique(RotateTileClockwise(CopyTile,i));
@@ -33,10 +36,10 @@ TArray<FWFC2DTile> UWFC2DModel::CreateTileSet()
 void UWFC2DModel::CalculateTileConstraints(FWFC2DTile& BaseTile, TArray<FWFC2DTile> TileSet)
 {
 	BaseTile.Constraint.Array.SetNum(4);
-	for(int32 i = 0; i < TileSet.Num(); i++)
+	for(int32 i = 0; i < TileSet.Num(); ++i)
 	{
 		FWFC2DTile& Tile = TileSet[i];
-		for (int32 j = 0; j < 4; j++)
+		for (int32 j = 0; j < 4; ++j)
 		{
 			if(BaseTile.Edges[j].Equals(Tile.Edges[(j + 2) % 4].Reverse()))
 			{

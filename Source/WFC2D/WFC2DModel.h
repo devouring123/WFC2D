@@ -116,12 +116,12 @@ public:
 	
 	bool operator==(const FWFC2DTile& Rhs) const
 	{
-		return Option.TileTexture2D == Rhs.Option.TileTexture2D && Edges == Rhs.Edges;
+		return Edges == Rhs.Edges;
 	}
 
 	bool operator!=(const FWFC2DTile& Rhs) const
 	{
-		return Option.TileTexture2D != Rhs.Option.TileTexture2D || Edges != Rhs.Edges;
+		return Edges != Rhs.Edges;
 	}
 	
 	friend uint32 GetTypeHash(const FWFC2DTile& Output)

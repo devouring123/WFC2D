@@ -15,7 +15,7 @@ AWFC2DActor::AWFC2DActor()
 	SetRootComponent(RootSceneComponent);
 	
 	InstancedMeshes.SetNum(TypeOfTiles);
-	for(int32 i = TypeOfTiles - 1; i >= 0; i--)
+	for(int32 i = TypeOfTiles - 1; i >= 0; --i)
 	{
 		FString InstancedMeshName = FString("Instanced Static Mesh");
 		InstancedMeshName.Append(FString::FromInt(i));
@@ -26,7 +26,6 @@ AWFC2DActor::AWFC2DActor()
 		InstancedMeshes[i]->SetCollisionProfileName(UCollisionProfile::BlockAllDynamic_ProfileName);
 		InstancedMeshes[i]->NumCustomDataFloats = 1;
 		InstancedMeshes[i]->SetCustomPrimitiveDataFloat(0,1);
-
 	}
 }
 
@@ -90,7 +89,7 @@ void AWFC2DActor::Collapse()
 	while(!CreateSucceed && CurrentTryCount > 0)
 	{
 		UE_LOG(LogTemp, Display, TEXT("TryCount: %d"), CurrentTryCount);
-		CurrentTryCount--;
+		--CurrentTryCount;
 		int32 WFC2DIterationCount = 0;
 		
 		// Initialize Grid
@@ -103,7 +102,7 @@ void AWFC2DActor::Collapse()
 		// Wave Function Collapse Single Iteration
 		while (WFC2DIterationCount != Dimension.X * Dimension.Y)
 		{
-			WFC2DIterationCount++;
+			++WFC2DIterationCount;
 
 			// Filter GridCopy Not Collapsed
 			TArray<FWFC2DCell> GridCopy = Grid.FilterByPredicate([](const FWFC2DCell& Cell)
@@ -124,7 +123,7 @@ void AWFC2DActor::Collapse()
 			// Create SubArray From Min Length Of Options
 			const int32 MinLengthOfOptions = GridCopy[0].RemainingOptions.Num();
 			int32 GridCopyCutIndex = 0;
-			for(int32 i = 1; i < GridCopy.Num(); i++)
+			for(int32 i = 1; i < GridCopy.Num(); ++i)
 			{
 				if(GridCopy[i].RemainingOptions.Num() > MinLengthOfOptions)
 				{
@@ -158,7 +157,7 @@ void AWFC2DActor::Collapse()
 			TArray<int32> IndicesOfCellsToVisit;
 			for (const auto Cell : CollapsedGrid)
 			{
-				for(int32 dir = 0; dir < 4; dir++)
+				for(int32 dir = 0; dir < 4; ++dir)
 				{
 					const int32 LocationX = Cell.Location / Dimension.Y + Dx[dir];
 					const int32 LocationY = Cell.Location % Dimension.Y + Dy[dir];
@@ -179,7 +178,7 @@ void AWFC2DActor::Collapse()
 				WFC2DModel->Constraints.GenerateKeyArray(FilteredCellOptions);
 
 				// Filter Cell Options which is Not Valid
-				for(int32 dir = 0; dir < 4; dir++)
+				for(int32 dir = 0; dir < 4; ++dir)
 				{
 					const int32 CellToVisitLocationX = CellToVisit.Location / Dimension.Y + Dx[dir];
 					const int32 CellToVisitLocationY = CellToVisit.Location % Dimension.Y + Dy[dir];
@@ -232,7 +231,7 @@ void AWFC2DActor::Collapse()
 void AWFC2DActor::InitGrid(TArray<FWFC2DCell>& Grid) const
 {
 	// Initialize Grid Options to All Tile Option
-	for (int32 i = 0; i < Grid.Num(); i++)
+	for (int32 i = 0; i < Grid.Num(); ++i)
 	{
 		WFC2DModel->Constraints.GenerateKeyArray(Grid[i].RemainingOptions);
 		Grid[i].Location = i;
@@ -242,7 +241,7 @@ void AWFC2DActor::InitGrid(TArray<FWFC2DCell>& Grid) const
 void AWFC2DActor::FilterValidOptions(TArray<FWFC2DOption>& CurrentOptions, TArray<FWFC2DOption>& ValidOptions) const
 {
 	// Delete CurrentOptions Option which Not Included ValidOptions
-	for(int32 i = CurrentOptions.Num() - 1; i >= 0; i--)
+	for(int32 i = CurrentOptions.Num() - 1; i >= 0; --i)
 	{
 		FWFC2DOption CheckOption = CurrentOptions[i];
 		if(!ValidOptions.Contains(CheckOption))
@@ -260,7 +259,7 @@ bool AWFC2DActor::IsInGrid(int32 LocationX, int32 LocationY) const
 void AWFC2DActor::InitInstancedMeshes()
 {
 	UE_LOG(LogTemp, Display, TEXT("Initialize Instanced Meshes"));
-	for(int32 i = 0; i < MaterialInstances.Num(); i++)
+	for(int32 i = 0; i < MaterialInstances.Num(); ++i)
 	{
 		InstancedMeshes[i]->SetStaticMesh(StaticMeshReference);
 		InstancedMeshes[i]->SetMaterial(0,MaterialInstances[i]);
@@ -276,7 +275,7 @@ void AWFC2DActor::CreateInstancedMeshes()
 	}
 	
 	// Create Instances
-	for(int32 i = 0; i < FinalGrid.Num(); i++)
+	for(int32 i = 0; i < FinalGrid.Num(); ++i)
 	{
 		const int32 TextureNumber = FinalGrid[i].RemainingOptions[0].TileTextureIndex;
 		InstancedMeshes[TextureNumber]->AddInstance(FTransform(

@@ -93,7 +93,7 @@ public:
 	TArray<UMaterialInterface*> MaterialInstances;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "WFC2D")
-	int32 TypeOfTiles = 10;
+	int32 TypeOfTiles = 20;
 	
 	// Collapse All Cells
 	UFUNCTION(BlueprintCallable, Category = "WFC2D")
