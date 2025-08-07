@@ -114,19 +114,40 @@ WFC2D Actor 구조
 
 ### 타일 제약조건 시스템
 ```cpp
-// 타일 Edge 데이터 예시
-struct FTileEdgeData
+// WFC2D 타일 데이터 구조
+struct FWFC2DTile
 {
-    ETileEdgeType TopEdge;
-    ETileEdgeType RightEdge; 
-    ETileEdgeType BottomEdge;
-    ETileEdgeType LeftEdge;
+    TArray<FString> Edges; // [Top, Right, Bottom, Left]
+    FWFC2DOption Option;
+    FWFC2DConstraint Constraint;
 };
 
-// 자동 제약조건 생성
-bool CheckTileCompatibility(const FTileEdgeData& TileA, const FTileEdgeData& TileB)
+// 실제 타일 호환성 검사 (WFC2DModel.cpp:44)
+void CalculateTileConstraints(FWFC2DTile& BaseTile, TArray<FWFC2DTile> TileSet)
 {
-    return TileA.RightEdge == TileB.LeftEdge; // 인접 타일 호환성 검사
+    for(int32 i = 0; i < TileSet.Num(); ++i)
+    {
+        FWFC2DTile& Tile = TileSet[i];
+        for (int32 j = 0; j < 4; ++j)
+        {
+            // 핵심: Edge 역순 비교로 타일 연결 가능성 검사
+            if(BaseTile.Edges[j].Equals(Tile.Edges[(j + 2) % 4].Reverse()))
+            {
+                BaseTile.Constraint.Array[j].Options.Add(Tile.Option);
+            }
+        }
+    }
+}
+
+// 타일 회전 처리 (90도 단위)
+FWFC2DTile RotateTileClockwise(FWFC2DTile& Tile, int32 RotationMultiplierBy90Degree)
+{
+    TArray<FString> RotatedEdge;
+    for(int32 i = 0; i < 4; ++i)
+    {
+        RotatedEdge.Add(Tile.Edges[(i - RotationMultiplierBy90Degree + 4) % 4]);
+    }
+    return Tile;
 }
 ```
 
